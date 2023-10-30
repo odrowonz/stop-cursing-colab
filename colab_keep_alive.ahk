@@ -20,7 +20,7 @@ KeepAlive(ColabWinTitle, Interval){
 			send("{PgUp %PgUpCount%}")
 		}
 		else{
-			MsgBox("Did not find Window : %ColabWinTitle%", "Halt : No Such Window")
+			MsgBox("Did not find Window : " . ColabWinTitle, "Halt : No Such Window")
 			Return	
 		}
 		Sleep(Interval)
@@ -29,22 +29,28 @@ KeepAlive(ColabWinTitle, Interval){
 	
 
 ColabFileName := InputBox("Enter the Google Colab filename", "Colab Keep Alive Script")
-ColabWinTitle := ColabFileName . " - Colaboratory - Google Chrome"
-if WinExist(ColabWinTitle){
-	WinActivate
-	Interval := InputBox("Enter an interval (in minutes) to emulate mouse and keyboard behaviour ", "Keep Alive  %ColabWinTitle%")
-	if (not(Interval is integer))
-	{
-		MsgBox("Enter an Integer for the Interval", "Halt : Bad Type")
-		Return
-	}
-	else{
-		MsgBox("interval set for %Interval% minutes.", "Interval Set")
-		Interval := 1000 * 60 * Interval
-		KeepAlive(ColabWinTitle , Interval)
-	}
-}
-else{
-	MsgBox("Did not find Window : %ColabWinTitle%", "Halt : No Such Window")
-	Return
+if (ColabFileName.Result = "Cancel") {
+    MsgBox("Google Colab filename entering was cancelled.")
+} else {
+    ColabWinTitle := ColabFileName.Value " - Colaboratory - Google Chrome"
+    if WinExist(ColabWinTitle) {
+    	WinActivate
+    	Interval := InputBox("Enter an interval (in minutes) to emulate mouse and keyboard behaviour ", "Keep Alive " . ColabWinTitle)
+        if (Interval.Result = "Cancel") {
+            MsgBox("Interval entering was cancelled.")
+        } else {
+    	    if (not(IsInteger(Interval.Value))) {
+    		    MsgBox("Enter an Integer for the Interval", "Halt : Bad Type")
+    		    Return
+    	    }
+    	    else {
+    	    	MsgBox("interval set for " . Interval.Value . " minutes.", "Interval Set")
+		        IntervalConv := 1000 * 60 * Interval.Value
+		        KeepAlive(ColabWinTitle , IntervalConv)
+	        }
+        }
+    } else {
+	    MsgBox("Did not find Window : " . ColabWinTitle, "Halt : No Such Window")
+	    Return
+    }
 }
