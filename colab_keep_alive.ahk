@@ -9,11 +9,15 @@ KeepAlive(ColabWinTitle, Interval){
 			WinMaximize  ; same
 			Sleep(2000)
 			MouseClick("left", 1750, 250, 1, 30)
-			Send("{WheelDown 10}")
-			Send("{WheelDown 20}")
-			send("{PgDn 2}")
+            WheelDownCount := Random(5, 20)
+			Send("{WheelDown %WheelDownCount%}")
+            WheelUpCount := Random(5, 20)
+			Send("{WheelUp %WheelUpCount%}")
+            PgDnCount := Random(2, 6)
+			send("{PgDn %PgDnCount%}")
 			MouseClick("left", 1750, 500, 1, 30)
-			send("{PgUp 4}")
+            PgUpCount := Random(2, 6)
+			send("{PgUp %PgUpCount%}")
 		}
 		else{
 			MsgBox("Did not find Window : %ColabWinTitle%", "Halt : No Such Window")
